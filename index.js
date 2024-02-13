@@ -1,27 +1,22 @@
 const http = require("http");
-
+const EventEmittter = require("events");
 const PORT = process.env.PORT || 5000;
+const Router = require("./framework/Router");
+const Application = require("./framework/Application");
 
-const server = http.createServer((req, res) => {
-  // res.writeHead(200, {
-  // "Content-type": "text/html; charset=utf-8",
-  // "Content-type": "text/html;",
-  // });
-  // res.end("Сервер работает!");
-  // res.end("<h1>HTML top</h1>");
+const app = new Application();
+const router = new Router();
 
-  res.writeHead(200, {
-    "Content-type": "application/json",
-  });
-  if (req.url === "/users") {
-    return res.end(JSON.stringify([{ id: 1, name: "Ulya" }]));
-  }
-  if (req.url === "/posts") {
-    return res.end("POSTS");
-  }
-  res.end(req.url);
+router.get("/users", (req, res) => {
+  res.end("You send request to /users");
 });
 
-server.listen(PORT, () => {
+router.get("/posts", (req, res) => {
+  res.end("You send request to /posts");
+});
+
+app.addRouter(router);
+
+app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT}`);
 });
